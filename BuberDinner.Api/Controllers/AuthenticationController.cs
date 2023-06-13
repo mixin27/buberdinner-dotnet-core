@@ -1,7 +1,10 @@
-using BuberDinner.Application.Services.Authentication;
+using BuberDinner.Application.Authentication.Commands.Register;
+using BuberDinner.Application.Authentication.Common;
+using BuberDinner.Application.Authentication.Queries.Login;
 using BuberDinner.Contracts.Authentication;
 using BuberDinner.Domain.Common.Errors;
 using ErrorOr;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BuberDinner.Api.Controllers;
@@ -9,39 +12,49 @@ namespace BuberDinner.Api.Controllers;
 [Route("auth")]
 public class AuthenticationController : ApiController
 {
-    private readonly IAuthenticationService _authenticationService;
+    private readonly ISender _mediator;
 
-    public AuthenticationController(IAuthenticationService authenticationService)
+    public AuthenticationController(ISender mediator)
     {
-        _authenticationService = authenticationService;
+        _mediator = mediator;
     }
 
     [HttpPost("register")]
-    public IActionResult Register(RegisterRequest request)
+    public async Task<IActionResult> Register(RegisterRequest request)
     {
-        ErrorOr<AuthenticationResult> registerResult = _authenticationService.Register(
+        var command = new RegisterCommand(
             request.FirstName,
             request.LastName,
             request.Email,
             request.Password);
 
-        return registerResult.Match(
+        ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
+
+        return authResult.Match(
             authResult => Ok(MapAuthResult(authResult)),
             errors => Problem(errors)
         );
     }
 
     [HttpPost("login")]
-    public IActionResult Login(LoginRequest request)
+    public async Task<IActionResult> Login(LoginRequest request)
     {
-        ErrorOr<AuthenticationResult> loginResult = _authenticationService.Login(request.Email, request.Password);
+        var command = new LoginQuery(
+            request.Email,
+            request.Password
+        );
 
-        if (loginResult.IsError && loginResult.FirstError == Errors.Authentication.InvalidCredentials)
+        ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
+
+        if (authResult.IsError
+            && authResult.FirstError == Errors.Authentication.InvalidCredentials)
         {
-            return Problem(statusCode: StatusCodes.Status401Unauthorized, title: loginResult.FirstError.Description);
+            return Problem(
+                statusCode: StatusCodes.Status401Unauthorized,
+                title: authResult.FirstError.Description);
         }
 
-        return loginResult.Match(
+        return authResult.Match(
             authResult => Ok(MapAuthResult(authResult)),
             errors => Problem(errors)
         );
