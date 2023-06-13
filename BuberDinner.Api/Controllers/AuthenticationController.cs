@@ -21,9 +21,9 @@ public class AuthenticationController : ControllerBase
         var result = _authenticationService.Register(request.FirstName, request.LastName, request.Email, request.Password);
 
         var response = new AuthenticationResponse(
-            result.FirstName,
-            result.LastName,
-            result.Email,
+            result.user.FirstName,
+            result.user.LastName,
+            result.user.Email,
             result.Token
         );
 
@@ -36,9 +36,9 @@ public class AuthenticationController : ControllerBase
         var result = _authenticationService.Login(request.Email, request.Password);
 
         var response = new AuthenticationResponse(
-            result.FirstName,
-            result.LastName,
-            result.Email,
+            result.user.FirstName,
+            result.user.LastName,
+            result.user.Email,
             result.Token
         );
 
