@@ -14,61 +14,52 @@ public sealed class Menu : AggregateRoot<MenuId>
     private readonly List<DinnerId> _dinnerIds = new();
     private readonly List<MenuReviewId> _menuReviewIds = new();
 
-    public string Name { get; }
-    public string Description { get; }
-    public AverageRating AverageRating { get; }
+    public string Name { get; private set; }
+    public string Description { get; private set; }
+    public AverageRating AverageRating { get; private set; }
 
     public IReadOnlyList<MenuSection> Sections => _sections.AsReadOnly();
 
-    public HostId HostId { get; }
+    public HostId HostId { get; private set; }
 
     public IReadOnlyList<DinnerId> DinnerIds => _dinnerIds.AsReadOnly();
     public IReadOnlyList<MenuReviewId> MenuReviewIds => _menuReviewIds.AsReadOnly();
-    public DateTime CreatedDateTime { get; }
-    public DateTime UpdatedDateTime { get; }
+    public DateTime CreatedDateTime { get; private set; }
+    public DateTime UpdatedDateTime { get; private set; }
 
-    public Menu(
+    private Menu(
         MenuId id,
+        HostId hostId,
         string name,
         string description,
         AverageRating averageRating,
-        HostId hostId,
-        List<MenuSection>? sections,
-        List<DinnerId>? dinnerIds,
-        List<MenuReviewId>? menuReviewIds,
-        DateTime createdDateTime,
-        DateTime updatedDateTime) : base(id)
+        List<MenuSection> sections) : base(id)
     {
+        HostId = hostId;
         Name = name;
         Description = description;
         AverageRating = averageRating;
-        HostId = hostId;
-        _sections = sections ?? new();
-        _dinnerIds = dinnerIds ?? new();
-        _menuReviewIds = _menuReviewIds ?? new();
-        CreatedDateTime = createdDateTime;
-        UpdatedDateTime = updatedDateTime;
+        _sections = sections;
     }
 
     public static Menu Create(
         string name,
         string description,
         HostId hostId,
-        List<MenuSection>? sections = null,
-        List<DinnerId>? dinnerIds = null,
-        List<MenuReviewId>? menuReviewIds = null,
-        AverageRating? averageRating = null)
+        List<MenuSection>? sections = null)
     {
         return new(
             MenuId.CreateUnique(),
+            hostId,
             name,
             description,
-            averageRating ?? AverageRating.CreateNew(),
-            hostId,
-            sections,
-            dinnerIds,
-            menuReviewIds,
-            DateTime.Now,
-            DateTime.Now);
+            AverageRating.CreateNew(),
+            sections ?? new());
     }
+
+#pragma warning disable CS8618
+    private Menu()
+    {
+    }
+#pragma warning restore CS8618
 }

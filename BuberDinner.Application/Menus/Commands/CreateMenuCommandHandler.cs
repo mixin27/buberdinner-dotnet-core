@@ -1,5 +1,4 @@
 using BuberDinner.Application.Common.Persistence;
-using BuberDinner.Domain.Common.ValueObjects;
 using BuberDinner.Domain.HostAggregate.ValueObjects;
 using BuberDinner.Domain.MenuAggregate;
 using BuberDinner.Domain.MenuAggregate.Entities;
@@ -25,7 +24,7 @@ public class CreateMenuCommandHandler : IRequestHandler<CreateMenuCommand, Error
 
         // Create Menu
         var menu = Menu.Create(
-            hostId: HostId.Create(request.HostId),
+            hostId: HostId.Create(Guid.Parse(request.HostId)),
             name: request.Name,
             description: request.Description,
             sections: request.Sections.ConvertAll(s => MenuSection.Create(

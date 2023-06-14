@@ -11,10 +11,11 @@ public sealed class HostId : ValueObject
         Value = value;
     }
 
-    public static HostId Create(string id)
+    public static HostId Create(Guid value)
     {
-        return CreateUnique();
+        return new HostId(value);
     }
+
 
     public static HostId CreateUnique()
     {

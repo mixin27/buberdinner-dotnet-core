@@ -24,6 +24,9 @@ insert_final_newline = false
 #### .NET Coding Conventions ####
 [*.{cs,vb}]
 
+[*/Migrations/*]
+generated_code = true
+
 # # Organize usings
 # dotnet_separate_import_directive_groups = true
 # dotnet_sort_system_directives_first = true
