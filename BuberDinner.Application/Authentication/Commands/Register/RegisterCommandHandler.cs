@@ -3,7 +3,7 @@ using BuberDinner.Application.Common.Persistence;
 using BuberDinner.Domain.Common.Errors;
 using ErrorOr;
 using MediatR;
-using BuberDinner.Domain.Entities;
+using BuberDinner.Domain.UserAggregate;
 using BuberDinner.Application.Authentication.Common;
 
 namespace BuberDinner.Application.Authentication.Commands.Register;
@@ -31,13 +31,14 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<A
         }
 
         // 2. Create user (generate unique ID) & persit to DB
-        var user = new User
-        {
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            Email = request.Email,
-            Password = request.Password
-        };
+        // var user = new User
+        // {
+        //     FirstName = request.FirstName,
+        //     LastName = request.LastName,
+        //     Email = request.Email,
+        //     Password = request.Password
+        // };
+        var user = User.Create(request.FirstName, request.LastName, request.Email, request.Password);
         _userRepository.Add(user);
 
         // 3. Create JWT Token
