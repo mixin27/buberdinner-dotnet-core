@@ -6,7 +6,7 @@ using BuberDinner.Domain.MenuAggregate.ValueObjects;
 
 namespace BuberDinner.Domain.HostAggregate;
 
-public sealed class Host : AggregateRoot<HostId>
+public sealed class Host : AggregateRoot<HostId, Guid>
 {
     private readonly List<MenuId> _menuIds = new();
     private readonly List<DinnerId> _dinnerIds = new();
@@ -27,8 +27,9 @@ public sealed class Host : AggregateRoot<HostId>
         string profileImage,
         AverageRating averageRating,
         DateTime createdDateTime,
-        DateTime updatedDateTime) : base(id)
+        DateTime updatedDateTime)
     {
+        Id = id;
         FirstName = firstName;
         LastName = lastName;
         ProfileImage = profileImage;

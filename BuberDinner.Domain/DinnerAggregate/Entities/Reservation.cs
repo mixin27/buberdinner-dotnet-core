@@ -5,7 +5,7 @@ using BuberDinner.Domain.GuestAggregate.ValueObjects;
 
 namespace BuberDinner.Domain.DinnerAggregate.Entities;
 
-public sealed class Reservation : AggregateRoot<ReservationId>
+public sealed class Reservation : AggregateRoot<ReservationId, Guid>
 {
     public int GuestCount { get; }
     public string ReservationStatus { get; }
@@ -23,8 +23,9 @@ public sealed class Reservation : AggregateRoot<ReservationId>
         BillId billId,
         DateTime? arrivalDateTime,
         DateTime createdDateTime,
-        DateTime updatedDateTime) : base(id)
+        DateTime updatedDateTime)
     {
+        Id = id;
         GuestCount = guestCount;
         ReservationStatus = reservationStatus;
         GuestId = guestId;

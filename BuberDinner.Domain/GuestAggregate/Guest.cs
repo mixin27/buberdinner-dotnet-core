@@ -9,7 +9,7 @@ using BuberDinner.Domain.UserAggregate.ValueObjects;
 
 namespace BuberDinner.Domain.GuestAggregate;
 
-public sealed class Guest : AggregateRoot<GuestId>
+public sealed class Guest : AggregateRoot<GuestId, Guid>
 {
     private readonly List<DinnerId> _upcomingDinnerIds = new();
     private readonly List<DinnerId> _pendingDinnerIds = new();
@@ -38,8 +38,9 @@ public sealed class Guest : AggregateRoot<GuestId>
         AverageRating averageRating,
         UserId userId,
         DateTime createdDateTime,
-        DateTime updatedDateTime) : base(id)
+        DateTime updatedDateTime)
     {
+        Id = id;
         FirstName = firstName;
         LastName = lastName;
         ProfileImage = profileImage;

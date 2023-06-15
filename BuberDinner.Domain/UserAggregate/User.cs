@@ -3,7 +3,7 @@ using BuberDinner.Domain.UserAggregate.ValueObjects;
 
 namespace BuberDinner.Domain.UserAggregate;
 
-public sealed class User : AggregateRoot<UserId>
+public sealed class User : AggregateRoot<UserId, Guid>
 {
     public string FirstName { get; }
     public string LastName { get; }
@@ -19,8 +19,9 @@ public sealed class User : AggregateRoot<UserId>
         string email,
         string password,
         DateTime createdDateTime,
-        DateTime updatedDateTime) : base(id)
+        DateTime updatedDateTime)
     {
+        Id = id;
         FirstName = firstName;
         LastName = lastName;
         Email = email;

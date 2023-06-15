@@ -6,7 +6,7 @@ using BuberDinner.Domain.MenuAggregate.ValueObjects;
 
 namespace BuberDinner.Domain.DinnerAggregate;
 
-public sealed class Dinner : AggregateRoot<DinnerId>
+public sealed class Dinner : AggregateRoot<DinnerId, Guid>
 {
     private readonly List<Reservation> _reservations = new();
 
@@ -41,8 +41,9 @@ public sealed class Dinner : AggregateRoot<DinnerId>
         string imageUrl,
         Location location,
         DateTime createdDateTime,
-        DateTime updatedDateTime) : base(id)
+        DateTime updatedDateTime)
     {
+        Id = id;
         Name = name;
         Description = description;
         StartedDateTime = startedDateTime;

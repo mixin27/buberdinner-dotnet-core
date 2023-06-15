@@ -6,7 +6,7 @@ using BuberDinner.Domain.HostAggregate.ValueObjects;
 
 namespace BuberDinner.Domain.GuestAggregate.Entities;
 
-public sealed class RatingAggregate : AggregateRoot<RatingId>
+public sealed class RatingAggregate : AggregateRoot<RatingId, Guid>
 {
     public HostId HostId { get; }
     public DinnerId DinnerId { get; }
@@ -20,8 +20,9 @@ public sealed class RatingAggregate : AggregateRoot<RatingId>
         DinnerId dinnerId,
         Rating rating,
         DateTime createdDateTime,
-        DateTime updatedDateTime) : base(id)
+        DateTime updatedDateTime)
     {
+        Id = id;
         HostId = hostId;
         DinnerId = dinnerId;
         Rating = rating;
